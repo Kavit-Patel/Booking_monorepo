@@ -41,7 +41,7 @@ const Navbar = () => {
             Home
           </Link>
           <Link
-            to="#"
+            to="/menu"
             onClick={() => setActive("Browse")}
             className={`w-28 h-9 transition-all hover:font-semibold  flex justify-center items-center cursor-pointer ${active === "Browse" ? " text-sm rounded-md bg-[#FC8A06] font-semibold text-white" : ""}`}
           >
