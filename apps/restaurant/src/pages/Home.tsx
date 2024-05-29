@@ -1,4 +1,19 @@
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store/store";
+import { useEffect } from "react";
+import { autoLogin } from "../store/user/userApi";
+
 const Home = () => {
+  const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    const userAutoLogin = async () => {
+      await dispatch(autoLogin());
+    };
+    if (user.autoLoginStatus === "idle" && !user.user) {
+      userAutoLogin();
+    }
+  }, [dispatch, user]);
   return (
     <div className="w-full h-full flex justify-center items-center">
       <div

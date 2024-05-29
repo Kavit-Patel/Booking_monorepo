@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { BsCartCheckFill } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { RootState } from "../store/store";
 
 const Navbar = () => {
+  const user = useSelector((state: RootState) => state.user);
   const [active, setActive] = useState<string>("");
   const [view, setView] = useState<boolean>(false);
   useEffect(() => {
@@ -64,13 +67,23 @@ const Navbar = () => {
             </span>
             <span>Cart</span>
           </Link>
-          <Link
-            to="#"
-            onClick={() => setActive("login")}
-            className={`w-28 h-9 transition-all hover:font-semibold  flex justify-center items-center cursor-pointer ${active === "login" ? " text-sm rounded-md bg-[#FC8A06] font-semibold text-white" : ""}`}
-          >
-            Login/Sign-up
-          </Link>
+          {user.user ? (
+            <div>
+              <img
+                className="w-7 h-7 rounded-full"
+                src={user.user.image}
+                alt=""
+              />
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              onClick={() => setActive("login")}
+              className={`w-28 h-9 transition-all hover:font-semibold  flex justify-center items-center cursor-pointer ${active === "login" ? " text-sm rounded-md bg-[#FC8A06] font-semibold text-white" : ""}`}
+            >
+              Login/Sign-up
+            </Link>
+          )}
         </div>
       </div>
     </div>

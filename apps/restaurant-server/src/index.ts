@@ -16,22 +16,21 @@ const allowed_Origins = process.env.CORS_URL
   ? process.env.CORS_URL.split(",")
   : [];
 console.log(allowed_Origins);
-app.use(cors());
-// app.use(
-//   cors({
-//     origin: (origin, callBack) => {
-//       console.log("origin", origin);
-//       if (!origin || allowed_Origins.indexOf(origin) === -1) {
-//         return callBack(
-//           new Error(`Cor's Policy doesn't allow ${origin}`),
-//           false
-//         );
-//       }
-//       return callBack(null, true);
-//     },
-//     credentials: true,
-//   })
-// );
+// app.use(cors());
+app.use(
+  cors({
+    origin: (origin, callBack) => {
+      if (!origin || allowed_Origins.indexOf(origin) === -1) {
+        return callBack(
+          new Error(`Cor's Policy doesn't allow ${origin}`),
+          false
+        );
+      }
+      return callBack(null, true);
+    },
+    credentials: true,
+  })
+);
 
 db_connect();
 app.use("/api", userRouter);

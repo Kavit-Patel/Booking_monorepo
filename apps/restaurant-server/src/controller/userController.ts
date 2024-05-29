@@ -68,7 +68,7 @@ export const loginUser = async (
     return res
       .status(200)
       .cookie("restaurant_token", token)
-      .json({ success: false, message: "Login Successful !", response: user });
+      .json({ success: true, message: "Login Successful !", response: user });
   } catch (error) {
     return res
       .status(500)
