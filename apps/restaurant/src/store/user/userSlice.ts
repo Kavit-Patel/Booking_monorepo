@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { autoLogin, loginUser, registerUser } from "./userApi";
+import { autoLogin, logOut, loginUser, registerUser } from "./userApi";
 
 export interface Iuser {
   id: string;
@@ -17,12 +17,14 @@ interface IinitialState {
   loginStatus: "idle" | "pending" | "success" | "false";
   registrationStatus: "idle" | "pending" | "success" | "false";
   autoLoginStatus: "idle" | "pending" | "success" | "false";
+  logOutStatus: "idle" | "pending" | "success" | "false";
 }
 const initialState: IinitialState = {
   user: null,
   loginStatus: "idle",
   registrationStatus: "idle",
   autoLoginStatus: "idle",
+  logOutStatus: "idle",
 };
 const userSlice = createSlice({
   name: "user",
@@ -59,6 +61,16 @@ const userSlice = createSlice({
       })
       .addCase(autoLogin.rejected, (state) => {
         state.autoLoginStatus = "false";
+      })
+      .addCase(logOut.fulfilled, (state) => {
+        state.logOutStatus = "success";
+        state.user = null;
+      })
+      .addCase(logOut.pending, (state) => {
+        state.logOutStatus = "pending";
+      })
+      .addCase(logOut.rejected, (state) => {
+        state.logOutStatus = "false";
       });
   },
 });

@@ -34,7 +34,7 @@ const Register = () => {
       data.append("file", image);
       data.append("upload_preset", "preset_test");
       try {
-        const cloud_name = "dnadg6wen";
+        const cloud_name = import.meta.env.VITE_CLOUDINARY_NAME;
         const resource_type = "image";
         const api = `https://api.cloudinary.com/v1_1/${cloud_name}/${resource_type}/upload`;
         const req = await fetch(api, { method: "POST", body: data });

@@ -87,3 +87,27 @@ export const autoLogin = createAsyncThunk(
     }
   }
 );
+
+export const logOut = createAsyncThunk(
+  "logOut/user",
+  async (_, { rejectWithValue }) => {
+    try {
+      const req = await fetch(`${import.meta.env.VITE_API}/api/logOut`, {
+        credentials: "include",
+        method: "GET",
+      });
+      const data = await req.json();
+      if (data.success) {
+        toast.success(data.message);
+        return;
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "LogOut Unsuccess !";
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);

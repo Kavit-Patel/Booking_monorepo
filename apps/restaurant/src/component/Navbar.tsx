@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import { BsCartCheckFill } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { RootState } from "../store/store";
+import Profile from "./Profile";
 
 const Navbar = () => {
+  const location = useLocation();
   const user = useSelector((state: RootState) => state.user);
   const [active, setActive] = useState<string>("");
   const [view, setView] = useState<boolean>(false);
+  const [userProfileMenu, setUserProfileMenu] = useState<boolean>(false);
   useEffect(() => {
     const windowResize = () => {
       if (window.innerWidth > 767) {
@@ -19,6 +22,20 @@ const Navbar = () => {
     window.addEventListener("resize", windowResize);
     return () => {
       window.removeEventListener("resize", windowResize);
+    };
+  }, []);
+  useEffect(() => {
+    if (location.pathname === "/") {
+      setActive("");
+    }
+  }, [location.pathname]);
+  useEffect(() => {
+    const handleProfileMenu = () => {
+      setUserProfileMenu(false);
+    };
+    window.addEventListener("click", () => handleProfileMenu());
+    return () => {
+      window.removeEventListener("click", () => handleProfileMenu());
     };
   }, []);
   return (
@@ -68,12 +85,24 @@ const Navbar = () => {
             <span>Cart</span>
           </Link>
           {user.user ? (
-            <div>
-              <img
-                className="w-7 h-7 rounded-full"
-                src={user.user.image}
-                alt=""
-              />
+            <div className="relative">
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setUserProfileMenu((prev) => !prev);
+                }}
+              >
+                <img
+                  className="w-7 h-7 rounded-full"
+                  src={user.user.image}
+                  alt=""
+                />
+              </div>
+              {userProfileMenu && (
+                <div className="z-20 absolute top-10 right-0">
+                  <Profile isAdmin={user.user.isAdmin} />
+                </div>
+              )}
             </div>
           ) : (
             <Link

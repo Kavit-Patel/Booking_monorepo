@@ -121,3 +121,20 @@ export const isAdmin = async (
       .json({ success: false, message: "Admin check failed !" });
   }
 };
+
+export const logOutUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    return res
+      .status(200)
+      .cookie("restaurant_token", "", { expires: new Date(0) })
+      .json({ success: true, message: "LogOut Successfull !" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "User LogOut Fail !" });
+  }
+};
