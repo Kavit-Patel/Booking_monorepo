@@ -5,13 +5,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { cookieUser } from "../utility/checkCookie";
 
-// export const registerUser = async(req:Request,res:Response,next:NextFunction)=>{
-//     try {
-
-//     } catch (error) {
-//         return res.status(500).json({success:false,message:"User Registration Fail !"})
-//     }
-// }
 export const registerUser = async (
   req: Request,
   res: Response,

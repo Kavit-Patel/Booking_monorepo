@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export interface Iuser {
-  id?: string;
+  _id?: string;
   name: string;
   isAdmin: boolean;
   email: string;

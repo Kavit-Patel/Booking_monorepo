@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import AddItem from "./component/AddItem";
+import Cart from "./pages/Cart";
 
 const App = () => {
   const user = useSelector((state: RootState) => state.user);
@@ -19,9 +20,14 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/menu" element={<Menu />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/addItem" element={user ? <AddItem /> : <Home />} />
+        <Route path="/cart/:id" element={<Cart />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/login" element={user.user ? <Home /> : <Login />} />
+        <Route path="/register" element={user.user ? <Home /> : <Register />} />
+        <Route
+          path="/addItem"
+          element={user.user?.isAdmin ? <AddItem /> : <Home />}
+        />
       </Routes>
     </BrowserRouter>
   );

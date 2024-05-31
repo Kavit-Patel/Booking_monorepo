@@ -25,3 +25,46 @@ export const addItem = async (
       .json({ success: false, message: "Adding new Item Fail !" });
   }
 };
+export const getItems = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const items = await menuModel.find({});
+    return res.status(200).json({
+      success: true,
+      message:
+        items.length === 0
+          ? "Items Fetched Successfully,but empty !"
+          : "Items Fetched successfully !",
+      response: items,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Fetching items Fail !" });
+  }
+};
+
+export const getItem = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    if (!id) return next(new errorHandler(403, "No Item id given !"));
+    const item = await menuModel.findById(id);
+    if (!item) return next(new errorHandler(403, "Item  doesn't exists !"));
+    return res.status(200).json({
+      success: true,
+      message: "Item Fetched successfully !",
+      response: item,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Fetching item Fail !" });
+  }
+};

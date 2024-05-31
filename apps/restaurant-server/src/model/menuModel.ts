@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export interface Imenu {
-  id?: string;
+  _id?: string;
   title: string;
   image: string;
   stock: number;

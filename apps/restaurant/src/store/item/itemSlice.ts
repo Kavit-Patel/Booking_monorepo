@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addItem } from "./itemApi";
+import { addItem, fetchItem, fetchItems } from "./itemApi";
 
 export interface IItem {
-  id: string;
+  _id: string;
   title: string;
   image: string;
   stock: number;
@@ -16,6 +16,7 @@ export interface IinitialState {
   item: IItem | null;
   itemsFetchedStatus: "idle" | "pending" | "success" | "fail";
   itemAddedStatus: "idle" | "pending" | "success" | "fail";
+  singleItemFetchedStatus: "idle" | "pending" | "success" | "fail";
 }
 
 const initialState: IinitialState = {
@@ -23,6 +24,7 @@ const initialState: IinitialState = {
   item: null,
   itemsFetchedStatus: "idle",
   itemAddedStatus: "idle",
+  singleItemFetchedStatus: "idle",
 };
 const itmeSlice = createSlice({
   name: "item",
@@ -39,6 +41,26 @@ const itmeSlice = createSlice({
       })
       .addCase(addItem.rejected, (state) => {
         state.itemAddedStatus = "fail";
+      })
+      .addCase(fetchItems.fulfilled, (state, action) => {
+        state.itemsFetchedStatus = "success";
+        state.items = action.payload;
+      })
+      .addCase(fetchItems.pending, (state) => {
+        state.itemsFetchedStatus = "pending";
+      })
+      .addCase(fetchItems.rejected, (state) => {
+        state.itemsFetchedStatus = "fail";
+      })
+      .addCase(fetchItem.fulfilled, (state, action) => {
+        state.singleItemFetchedStatus = "success";
+        state.item = action.payload;
+      })
+      .addCase(fetchItem.pending, (state) => {
+        state.singleItemFetchedStatus = "pending";
+      })
+      .addCase(fetchItem.rejected, (state) => {
+        state.singleItemFetchedStatus = "fail";
       });
   },
 });

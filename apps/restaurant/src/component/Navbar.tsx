@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { BsCartCheckFill } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
-import { RootState } from "../store/store";
+import { AppDispatch, RootState } from "../store/store";
 import Profile from "./Profile";
+import { autoLogin } from "../store/user/userApi";
 
 const Navbar = () => {
   const location = useLocation();
   const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch<AppDispatch>();
   const [active, setActive] = useState<string>("");
   const [view, setView] = useState<boolean>(false);
   const [userProfileMenu, setUserProfileMenu] = useState<boolean>(false);
@@ -28,6 +30,9 @@ const Navbar = () => {
     if (location.pathname === "/") {
       setActive("");
     }
+    if (location.pathname.includes("cart")) {
+      setActive("Cart");
+    }
   }, [location.pathname]);
   useEffect(() => {
     const handleProfileMenu = () => {
@@ -38,6 +43,14 @@ const Navbar = () => {
       window.removeEventListener("click", () => handleProfileMenu());
     };
   }, []);
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (!user.user) {
+        await dispatch(autoLogin());
+      }
+    };
+    fetchUser();
+  }, [dispatch, user.user]);
   return (
     <div className="w-full bg-[#e9e8e3] px-4 h-9 flex items-center">
       <div className="w-full h-full flex justify-between items-center">
@@ -75,7 +88,7 @@ const Navbar = () => {
             About
           </Link>
           <Link
-            to="#"
+            to="/cart"
             onClick={() => setActive("Cart")}
             className={`w-28 h-9 transition-all hover:font-semibold  flex justify-center items-center cursor-pointer ${active === "Cart" ? " text-sm rounded-md bg-[#FC8A06] font-semibold text-white" : ""}`}
           >

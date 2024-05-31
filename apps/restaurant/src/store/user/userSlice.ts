@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { autoLogin, logOut, loginUser, registerUser } from "./userApi";
 
 export interface Iuser {
-  id: string;
+  _id: string;
   name: string;
   isAdmin: boolean;
   email: string;

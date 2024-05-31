@@ -6,6 +6,7 @@ import { errorMiddleware } from "./utility/errorHandler";
 import userRouter from "./route/userRoute";
 import cookieParser from "cookie-parser";
 import menuRoute from "./route/menuRoute";
+import cartRouter from "./route/cartRoute";
 
 const app = express();
 config();
@@ -35,6 +36,7 @@ app.use(
 db_connect();
 app.use("/api", userRouter);
 app.use("/api", menuRoute);
+app.use("/api", cartRouter);
 
 app.use(errorMiddleware);
 app.listen(4000, () => console.log("Express Connected...."));

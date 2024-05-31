@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 export interface Ireviw {
-  id?: string;
+  _id?: string;
   item: mongoose.Types.ObjectId;
   customer: mongoose.Types.ObjectId;
   message: string;
