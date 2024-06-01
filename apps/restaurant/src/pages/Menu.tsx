@@ -4,8 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../store/store";
 import { fetchItems } from "../store/item/itemApi";
 import Loader from "../component/Loader";
-import { addToCart } from "../store/cart/cartApi";
 import { LsCartOperation } from "../utilityFunctions/localStorage";
+import { addToCart } from "../store/cart/cartApi";
+import { IItem } from "../store/item/itemSlice";
 
 const Menu = () => {
   const navigate = useNavigate();
@@ -21,13 +22,18 @@ const Menu = () => {
       getItems();
     }
   }, [dispatch, items.items.length]);
-  const handleAddToCart = async (itemId: string, stock: number) => {
+  const handleAddToCart = async (item: IItem) => {
+    console.log("clicked");
+
     if (user.user) {
-      LsCartOperation(itemId, "addition", stock, user.user._id);
-      await dispatch(addToCart({ itemId, userId: user.user._id, quantity: 1 }));
-    } else {
-      LsCartOperation(itemId, "addition", stock);
+      console.log("user is logged in");
+
+      await dispatch(
+        addToCart({ itemId: item._id, userId: user.user._id, quantity: 1 })
+      );
     }
+    LsCartOperation(item, "addition", item.stock, user.user?._id ?? "guest");
+
     navigate("/cart");
   };
   return (
@@ -42,7 +48,7 @@ const Menu = () => {
           <section className=" w-full h-full flex flex-wrap justify-center gap-20  mx-2 md:mx-8">
             {items.items.map((item) => (
               <div
-                onClick={() => handleAddToCart(item._id, item.stock)}
+                onClick={() => handleAddToCart(item)}
                 key={item._id}
                 className="transition-all hover:scale-110 cursor-pointer"
               >

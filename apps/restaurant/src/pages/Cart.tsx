@@ -1,38 +1,77 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { AppDispatch, RootState } from "../store/store";
 import Loader from "../component/Loader";
-import { getCart } from "../store/cart/cartApi";
+import { removeItem, syncLsDb } from "../store/cart/cartApi";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { RxCross1 } from "react-icons/rx";
+import { LsCartOperation, currentLs } from "../utilityFunctions/localStorage";
+import { getLsCart } from "../store/cart/cartSlice";
+import { IItem } from "../store/item/itemSlice";
 
 const Cart = () => {
   const dispatch = useDispatch<AppDispatch>();
   const cart = useSelector((state: RootState) => state.cart);
   const user = useSelector((state: RootState) => state.user);
+  const syncRef = useRef<boolean>(false);
 
   useEffect(() => {
-    const fetchItems = async () => {
+    const syncingWithDb = async () => {
       if (user.user) {
-        await dispatch(getCart(user.user._id));
+        syncRef.current = true;
+        await dispatch(
+          syncLsDb({ dataObj: cart.lsCart, userId: user.user._id })
+        );
       }
     };
-    fetchItems();
-  }, [dispatch, user.user]);
+    if (!syncRef.current) {
+      syncingWithDb();
+    }
+  }, [dispatch, user.user, cart.lsCart]);
+
+  useEffect(() => {
+    if (cart.cartSyncedStatus === "success") {
+      localStorage.setItem("restaurantCart", JSON.stringify(cart.lsCart));
+    }
+  }, [cart.cartSyncedStatus, cart.lsCart]);
+  useEffect(() => {
+    const ls = currentLs();
+    dispatch(getLsCart(ls));
+  }, [dispatch, cart.cartSyncedStatus]);
+  const cartOperation = async (
+    operation: string,
+    item: IItem,
+    stock: number,
+    quantity: number
+  ) => {
+    if (operation === "remove" && user.user) {
+      const changedLsItems = LsCartOperation(
+        item,
+        operation,
+        stock,
+        user.user?._id ? user.user._id : "guest",
+        quantity
+      );
+      dispatch(getLsCart(changedLsItems));
+      await dispatch(removeItem({ userId: user.user._id, itemId: item._id }));
+    } else {
+      alert("You need to logIn first, To remove cart-item !");
+    }
+  };
   return (
     <div className="w-full h-full flex flex-col gap-4 p-8 overflow-y-auto">
       <div className="text-xl md:text-2xl w-full flex justify-center">
         <h2 className="border-b-2 border-[#F1D5BB] w-fit pb-1 px-2">Cart</h2>
       </div>
       <div className="w-full h-full flex justify-center items-center">
-        {cart.cart.length !== 0 ? (
+        {cart.lsCart.length !== 0 ? (
           cart.cartFetchedStatus === "pending" ? (
             <Loader />
           ) : (
-            <div className="w-full flex gap-3">
-              <div className="w-full px-3 md:w-[55%] min-h-72 bg-[#F1D5BB]">
-                {cart.cart.map((item) => (
+            <div className="w-full flex justify-center gap-3">
+              <div className="w-full px-3 md:w-[50%] min-h-72 bg-[#F1D5BB]">
+                {cart.lsCart.map((item) => (
                   <div
                     key={item._id}
                     className="p-4 flex justify-between items-center gap-3"
@@ -47,19 +86,61 @@ const Cart = () => {
                       <p>${item.item.price}</p>
                     </div>
                     <div className="w-40 flex items-center text-xs gap-3">
-                      <FaMinus />
+                      <FaMinus
+                        onClick={() =>
+                          cartOperation(
+                            "subtraction",
+                            item.item,
+                            item.item.stock,
+                            item.quantity
+                          )
+                        }
+                      />
                       <span className=" bg-white py-1 px-2 rounded-sm text-sm">
-                        1
+                        {item.quantity}
                       </span>
-                      <FaPlus />
+                      <FaPlus
+                        onClick={() =>
+                          cartOperation(
+                            "addition",
+                            item.item,
+                            item.item.stock,
+                            item.quantity
+                          )
+                        }
+                      />
                     </div>
                     <div className="w-12 text-red-700">
-                      <RxCross1 />
+                      <RxCross1
+                        onClick={() =>
+                          cartOperation(
+                            "remove",
+                            item.item,
+                            item.item.stock,
+                            item.quantity
+                          )
+                        }
+                      />
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="w-full px-3 md:w-[45%] min-h-72 bg-[#F1D5BB]"></div>
+              <div className="w-full px-4 py-8 md:w-[35%] min-h-72 bg-[#F1D5BB] flex flex-col items-center gap-3 ">
+                <h2 className="text-xl md:text-2xl">Your Subtotal</h2>
+                <div className="flex gap-4">
+                  <span>Subtotal</span>
+                  <span>
+                    $
+                    {cart.lsCart.reduce(
+                      (acc, el) => acc + el.quantity * el.item.price,
+                      0
+                    )}
+                  </span>
+                </div>
+                <div className="px-4 py-2 bg-black text-white cursor-pointer mt-auto transition-all hover:scale-105 active:scale-95">
+                  Confirm Order
+                </div>
+              </div>
             </div>
           )
         ) : (
