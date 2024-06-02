@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { AppDispatch, RootState } from "../store/store";
@@ -9,12 +9,15 @@ import { RxCross1 } from "react-icons/rx";
 import { LsCartOperation, currentLs } from "../utilityFunctions/localStorage";
 import { getLsCart } from "../store/cart/cartSlice";
 import { IItem } from "../store/item/itemSlice";
+import SelectAddress from "../component/SelectAddress";
 
 const Cart = () => {
   const dispatch = useDispatch<AppDispatch>();
   const cart = useSelector((state: RootState) => state.cart);
   const user = useSelector((state: RootState) => state.user);
+  const address = useSelector((state: RootState) => state.address);
   const syncRef = useRef<boolean>(false);
+  const [selectAddress, setSelectAddress] = useState<boolean>(false);
 
   useEffect(() => {
     const syncingWithDb = async () => {
@@ -57,6 +60,14 @@ const Cart = () => {
       await dispatch(removeItem({ userId: user.user._id, itemId: item._id }));
     } else {
       alert("You need to logIn first, To remove cart-item !");
+    }
+  };
+  const backButton = (status: boolean) => {
+    setSelectAddress(status);
+  };
+  const handleOrder = () => {
+    if (!address.selectedAddress) {
+      setSelectAddress(true);
     }
   };
   return (
@@ -137,10 +148,18 @@ const Cart = () => {
                     )}
                   </span>
                 </div>
-                <div className="px-4 py-2 bg-black text-white cursor-pointer mt-auto transition-all hover:scale-105 active:scale-95">
+                <div
+                  onClick={() => handleOrder()}
+                  className="px-4 py-2 bg-black text-white cursor-pointer mt-auto transition-all hover:scale-105 active:scale-95"
+                >
                   Confirm Order
                 </div>
               </div>
+              {selectAddress && (
+                <div className="absolute top-12">
+                  <SelectAddress back={(arg: boolean) => backButton(arg)} />
+                </div>
+              )}
             </div>
           )
         ) : (

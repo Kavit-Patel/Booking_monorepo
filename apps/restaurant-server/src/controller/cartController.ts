@@ -1,8 +1,7 @@
-import { NextFunction, Request, Response, response } from "express";
+import { NextFunction, Request, Response } from "express";
 import errorHandler from "../utility/errorHandler";
-import { Icart, cartModel } from "../model/cartModel";
-import { Imenu } from "../model/menuModel";
-import mongoose from "mongoose";
+import { cartModel } from "../model/cartModel";
+
 export const addToCart = async (
   req: Request,
   res: Response,
@@ -33,18 +32,6 @@ export const addToCart = async (
       .json({ success: false, message: "Cart Addition Fail !" });
   }
 };
-// export const getCart = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//   } catch (error) {
-//     return res
-//       .status(500)
-//       .json({ success: false, message: "Cart Fetching Failed !" });
-//   }
-// };
 
 export const getCart = async (
   req: Request,
