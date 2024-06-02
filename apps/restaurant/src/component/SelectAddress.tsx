@@ -8,7 +8,7 @@ import { fetchAddresses } from "../store/address/addressApi";
 const SelectAddress = ({ back }: { back: (arg: boolean) => void }) => {
   const address = useSelector((state: RootState) => state.address);
   const user = useSelector((state: RootState) => state.user);
-  const cart = useSelector((state: RootState) => state.cart);
+  // const cart = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch<AppDispatch>();
   const [addForm, setAddForm] = useState<boolean>(false);
   const [addressSelected, setAddressSelected] = useState<string | null>(null);
@@ -30,20 +30,20 @@ const SelectAddress = ({ back }: { back: (arg: boolean) => void }) => {
     fetchAdd();
   }, [dispatch, user.user]);
   const createOrder = async () => {
-    const products = cart.cart.map((product) => {
-      return {
-        product: product._id,
-        quantity: product.quantity,
-        price: product.item.price,
-      };
-    });
-    const tax: number = 112;
-    const shipping: number = 40;
-    const subtotal: number = cart.cart.reduce(
-      (acc, el) => acc + el.quantity * el.item.price,
-      0
-    );
-    const total: number = subtotal + shipping + tax;
+    // const products = cart.cart.map((product) => {
+    //   return {
+    //     product: product._id,
+    //     quantity: product.quantity,
+    //     price: product.item.price,
+    //   };
+    // });
+    // const tax: number = 112;
+    // const shipping: number = 40;
+    // const subtotal: number = cart.cart.reduce(
+    //   (acc, el) => acc + el.quantity * el.item.price,
+    //   0
+    // );
+    // const total: number = subtotal + shipping + tax;
   };
   return (
     <div className="min-w-[280px] md:w-[800px] lg:w-[1080px] min-h-96 max-h-[32rem] bg-[#e9e8e3] flex flex-col items-center ">

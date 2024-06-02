@@ -1,12 +1,11 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { AppDispatch, RootState } from "../store/store";
+import { AppDispatch } from "../store/store";
 import { fetchItem } from "../store/item/itemApi";
 
 const Item = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const items = useSelector((state: RootState) => state.item);
   const { id } = useParams();
   useEffect(() => {
     const getItem = async () => {
