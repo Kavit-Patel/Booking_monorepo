@@ -9,6 +9,7 @@ import menuRoute from "./route/menuRoute";
 import cartRouter from "./route/cartRoute";
 import orderRouter from "./route/orderRoute";
 import addressRoute from "./route/addressRoute";
+import Razorpay from "razorpay";
 
 const app = express();
 config();
@@ -36,6 +37,10 @@ app.use(
 );
 
 db_connect();
+export const instance = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID || "",
+  key_secret: process.env.RAZORPAY_KEY_SECRET || "",
+});
 app.use("/api", userRouter);
 app.use("/api", menuRoute);
 app.use("/api", cartRouter);

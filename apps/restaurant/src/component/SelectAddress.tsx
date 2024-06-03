@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import AddressForm from "./AddressForm";
 import { fetchAddresses } from "../store/address/addressApi";
+import { generateOrder } from "../store/order/orderApi";
+import { useNavigate } from "react-router-dom";
 
 const SelectAddress = ({ back }: { back: (arg: boolean) => void }) => {
+  const navigate = useNavigate();
   const address = useSelector((state: RootState) => state.address);
   const user = useSelector((state: RootState) => state.user);
-  // const cart = useSelector((state: RootState) => state.cart);
+  const cart = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch<AppDispatch>();
   const [addForm, setAddForm] = useState<boolean>(false);
   const [addressSelected, setAddressSelected] = useState<string | null>(null);
@@ -30,20 +33,40 @@ const SelectAddress = ({ back }: { back: (arg: boolean) => void }) => {
     fetchAdd();
   }, [dispatch, user.user]);
   const createOrder = async () => {
-    // const products = cart.cart.map((product) => {
-    //   return {
-    //     product: product._id,
-    //     quantity: product.quantity,
-    //     price: product.item.price,
-    //   };
-    // });
-    // const tax: number = 112;
-    // const shipping: number = 40;
-    // const subtotal: number = cart.cart.reduce(
-    //   (acc, el) => acc + el.quantity * el.item.price,
-    //   0
-    // );
-    // const total: number = subtotal + shipping + tax;
+    const cartIds = cart.cart.map((product) => {
+      return product._id;
+    });
+    const products = cart.cart.map((product) => {
+      return {
+        product: product.item._id,
+        quantity: product.quantity,
+        price: product.item.price,
+      };
+    });
+    const tax: number = 112;
+    const shipping: number = 40;
+    const subtotal: number = cart.cart.reduce(
+      (acc, el) => acc + el.quantity * el.item.price,
+      0
+    );
+    const total: number = subtotal + shipping + tax;
+    if (addressSelected && user.user) {
+      await dispatch(
+        generateOrder({
+          dataObj: {
+            cartIds,
+            products,
+            address: addressSelected,
+            tax,
+            shipping,
+            subtotal,
+            total,
+          },
+          userId: user.user._id,
+        })
+      );
+      navigate("/order");
+    }
   };
   return (
     <div className="min-w-[280px] md:w-[800px] lg:w-[1080px] min-h-96 max-h-[32rem] bg-[#e9e8e3] flex flex-col items-center ">

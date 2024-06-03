@@ -13,6 +13,7 @@ export interface Iorder {
   shipping: number;
   subtotal: number;
   total: number;
+  payment: { payId: mongoose.Types.ObjectId; payStatus: string };
 }
 
 const orderSchema = new mongoose.Schema({
@@ -40,5 +41,9 @@ const orderSchema = new mongoose.Schema({
   shipping: { type: Number, required: true },
   subtotal: { type: Number, required: true },
   total: { type: Number, required: true },
+  payment: {
+    payId: { type: mongoose.Schema.Types.ObjectId, ref: "Payment" },
+    payStatus: { type: String, enum: ["Pending", "Done"], default: "Pending" },
+  },
 });
 export const orderModel = mongoose.model<Iorder>("Order", orderSchema);
