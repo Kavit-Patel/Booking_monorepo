@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../store/store";
 import Loader from "../component/Loader";
 import { removeItem, syncLsDb } from "../store/cart/cartApi";
@@ -12,6 +12,7 @@ import { IItem } from "../store/item/itemSlice";
 import SelectAddress from "../component/SelectAddress";
 
 const Cart = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const cart = useSelector((state: RootState) => state.cart);
   const user = useSelector((state: RootState) => state.user);
@@ -48,7 +49,7 @@ const Cart = () => {
     stock: number,
     quantity: number
   ) => {
-    if (operation === "remove" && user.user) {
+    if (operation !== "remove") {
       const changedLsItems = LsCartOperation(
         item,
         operation,
@@ -57,15 +58,23 @@ const Cart = () => {
         quantity
       );
       dispatch(getLsCart(changedLsItems));
-      await dispatch(removeItem({ userId: user.user._id, itemId: item._id }));
     } else {
-      alert("You need to logIn first, To remove cart-item !");
+      if (user.user) {
+        await dispatch(removeItem({ userId: user.user._id, itemId: item._id }));
+      } else {
+        alert("You need to logIn first, To remove cart-item !");
+      }
     }
   };
   const backButton = (status: boolean) => {
     setSelectAddress(status);
   };
   const handleOrder = () => {
+    if (!user.user) {
+      alert("You need to login before further action !");
+      navigate("/login");
+      return;
+    }
     if (!address.selectedAddress) {
       setSelectAddress(true);
     }
@@ -156,7 +165,7 @@ const Cart = () => {
                 </div>
               </div>
               {selectAddress && (
-                <div className="absolute top-12">
+                <div className="w-full h-full absolute top-12 px-8">
                   <SelectAddress back={(arg: boolean) => backButton(arg)} />
                 </div>
               )}

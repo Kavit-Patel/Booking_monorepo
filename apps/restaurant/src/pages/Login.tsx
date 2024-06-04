@@ -20,7 +20,6 @@ const Login = () => {
     setUserDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("clicked");
     e.preventDefault();
     setLoader(true);
     await dispatch(loginUser(userDetails));

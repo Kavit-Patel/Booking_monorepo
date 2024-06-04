@@ -12,6 +12,7 @@ import AddItem from "./component/AddItem";
 import Cart from "./pages/Cart";
 import Order from "./pages/Order";
 import MyOrders from "./pages/MyOrders";
+import PaymentSuccess from "./pages/PaymentSuccess";
 
 const App = () => {
   const user = useSelector((state: RootState) => state.user);
@@ -52,6 +53,7 @@ const App = () => {
           path="/myOrders"
           element={user.user ? <MyOrders /> : <Login />}
         />
+        <Route path="/paymentSuccess" element={<PaymentSuccess />} />
       </Routes>
     </BrowserRouter>
   );

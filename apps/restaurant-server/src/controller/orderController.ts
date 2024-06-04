@@ -88,7 +88,9 @@ export const fetchUserOrders = async (
   try {
     const { userId } = req.params;
     if (!userId) return next(new errorHandler(403, "Provide userId !"));
-    const userOrders = await orderModel.find({ user: userId });
+    const userOrders = await orderModel
+      .find({ user: userId })
+      .populate("payment.payId");
     return res.status(200).json({
       success: true,
       message:

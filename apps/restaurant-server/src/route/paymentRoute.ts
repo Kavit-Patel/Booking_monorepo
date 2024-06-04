@@ -1,8 +1,9 @@
 import express from "express";
-import { paymentIntent } from "../controller/paymentController";
+import { pay, paymentIntent } from "../controller/paymentController";
 
 const paymentRouter = express.Router();
 
-paymentRouter.get("/generatePaymentIntent/:userId/:orderId", paymentIntent);
+paymentRouter.post("/generatePaymentIntent/:userId/:orderId", paymentIntent);
+paymentRouter.post("/pay", pay);
 
 export default paymentRouter;

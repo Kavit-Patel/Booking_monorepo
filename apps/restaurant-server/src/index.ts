@@ -10,6 +10,7 @@ import cartRouter from "./route/cartRoute";
 import orderRouter from "./route/orderRoute";
 import addressRoute from "./route/addressRoute";
 import Razorpay from "razorpay";
+import paymentRouter from "./route/paymentRoute";
 
 const app = express();
 config();
@@ -46,6 +47,7 @@ app.use("/api", menuRoute);
 app.use("/api", cartRouter);
 app.use("/api", orderRouter);
 app.use("/api", addressRoute);
+app.use("/api", paymentRouter);
 
 app.use(errorMiddleware);
 app.listen(4000, () => console.log("Express Connected...."));

@@ -5,7 +5,7 @@ export interface Iproducts {
   price: number;
 }
 export interface Iorder {
-  _id: string;
+  _id?: string;
   user: mongoose.Types.ObjectId;
   products: Iproducts[];
   address: mongoose.Types.ObjectId;

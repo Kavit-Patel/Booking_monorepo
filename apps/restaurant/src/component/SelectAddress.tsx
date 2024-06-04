@@ -69,7 +69,7 @@ const SelectAddress = ({ back }: { back: (arg: boolean) => void }) => {
     }
   };
   return (
-    <div className="min-w-[280px] md:w-[800px] lg:w-[1080px] min-h-96 max-h-[32rem] bg-[#e9e8e3] flex flex-col items-center ">
+    <div className="w-full  h-[36rem] bg-[#e9e8e3] flex flex-col items-center ">
       <p className="py-2">Select Address :</p>
       {address.addresses.length === 0 ? (
         <div className="w-full h-72 p-4 md:p-12 flex flex-col gap-4 justify-center items-center">
@@ -82,7 +82,7 @@ const SelectAddress = ({ back }: { back: (arg: boolean) => void }) => {
           </p>
         </div>
       ) : (
-        <div className="w-full h-64 flex flex-col items-center justify-center gap-3 overflow-y-auto p-2 ">
+        <div className="w-full h-96 flex flex-col items-center justify-center gap-3 overflow-y-auto p-2 ">
           {address.addresses.map((el) => (
             <div
               key={el._id}

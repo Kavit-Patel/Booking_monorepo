@@ -23,11 +23,7 @@ const Menu = () => {
     }
   }, [dispatch, items.items.length]);
   const handleAddToCart = async (item: IItem) => {
-    console.log("clicked");
-
     if (user.user) {
-      console.log("user is logged in");
-
       await dispatch(
         addToCart({ itemId: item._id, userId: user.user._id, quantity: 1 })
       );

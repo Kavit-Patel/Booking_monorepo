@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import { Iaddress } from "../address/addressSlice";
 import { IItem } from "../item/itemSlice";
 import { fetchOrders, generateOrder } from "./orderApi";
+import { Ipayment } from "../payment/paymentSlice";
 interface Iproducts {
+  _id: string;
   product: IItem;
   quantity: number;
   price: number;
@@ -16,7 +18,7 @@ interface Iorder {
   shipping: number;
   subtotal: number;
   total: number;
-  payment: { payId: string; payStatus: string };
+  payment: { payId: Ipayment; payStatus: string };
 }
 export interface IinitialState {
   orders: Iorder[] | [];

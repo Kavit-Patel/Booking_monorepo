@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 interface Ipayment {
+  _id?: string;
   user: mongoose.Types.ObjectId;
   order: mongoose.Types.ObjectId;
   amount: number;

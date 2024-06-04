@@ -16,9 +16,9 @@ const Profile = ({ isAdmin }: { isAdmin: boolean }) => {
           Add New Item
         </Link>
       )}
-      <Link to="/addItem">Profile</Link>
+      <Link to="/#">Profile</Link>
       <Link to="/myOrders">Orders</Link>
-      <div onClick={() => handleLogOut()} className="">
+      <div onClick={() => handleLogOut()} className=" cursor-pointer">
         LogOut
       </div>
     </div>
