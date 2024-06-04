@@ -68,28 +68,40 @@ const Navbar = () => {
         >
           <Link
             to="/"
-            onClick={() => setActive("Home")}
+            onClick={() => {
+              setActive("Home");
+              setView(false);
+            }}
             className={`w-28 h-9 transition-all hover:font-semibold flex justify-center items-center cursor-pointer ${active === "Home" ? " text-sm rounded-md bg-[#FC8A06] font-semibold text-white" : ""}`}
           >
             Home
           </Link>
           <Link
             to="/menu"
-            onClick={() => setActive("Browse")}
+            onClick={() => {
+              setActive("Browse");
+              setView(false);
+            }}
             className={`w-28 h-9 transition-all hover:font-semibold  flex justify-center items-center cursor-pointer ${active === "Browse" ? " text-sm rounded-md bg-[#FC8A06] font-semibold text-white" : ""}`}
           >
             Browse Menu
           </Link>
           <Link
             to="#"
-            onClick={() => setActive("About")}
+            onClick={() => {
+              setActive("About");
+              setView(false);
+            }}
             className={`w-28 h-9 transition-all hover:font-semibold  flex justify-center items-center cursor-pointer ${active === "About" ? " text-sm rounded-md bg-[#FC8A06] font-semibold text-white" : ""}`}
           >
             About
           </Link>
           <Link
             to="/cart"
-            onClick={() => setActive("Cart")}
+            onClick={() => {
+              setActive("Cart");
+              setView(false);
+            }}
             className={`w-28 h-9 transition-all hover:font-semibold  flex justify-center items-center cursor-pointer ${active === "Cart" ? " text-sm rounded-md bg-[#FC8A06] font-semibold text-white" : ""}`}
           >
             <span className="text-sm mr-1">

@@ -26,11 +26,14 @@ export const registerUser = async (
       { userId: newUser._id },
       process.env.JWT_SECRET || "jwt"
     );
-    return res.status(201).cookie("restaurant_token", token).json({
-      success: true,
-      message: "User Registeration Successfull !",
-      response: newUser,
-    });
+    return res
+      .status(201)
+      .cookie("restaurant_token", token, { sameSite: "none", secure: true })
+      .json({
+        success: true,
+        message: "User Registeration Successfull !",
+        response: newUser,
+      });
   } catch (error) {
     return res
       .status(500)
@@ -60,7 +63,7 @@ export const loginUser = async (
     );
     return res
       .status(200)
-      .cookie("restaurant_token", token)
+      .cookie("restaurant_token", token, { sameSite: "none", secure: true })
       .json({ success: true, message: "Login Successful !", response: user });
   } catch (error) {
     return res

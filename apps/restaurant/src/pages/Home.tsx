@@ -9,7 +9,6 @@ const Home = () => {
   const checkOnce = useRef<boolean>(false);
   useEffect(() => {
     const userAutoLogin = async () => {
-      console.log(user.autoLoginStatus, user.user);
       checkOnce.current = true;
       await dispatch(autoLogin());
     };
