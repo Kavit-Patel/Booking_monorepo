@@ -88,7 +88,6 @@ export const syncLsDb = createAsyncThunk(
       const data = await req.json();
       if (data.success) {
         toast.success(data.message);
-        console.log("received", data.response);
         return data.response;
       } else {
         throw new Error(data.message);

@@ -81,7 +81,7 @@ const AddressForm = ({
     });
   };
   return (
-    <div className="min-w-[280px] md:w-[800px] lg:w-[1080px] h-[34rem] bg-[#e9e8e3] flex justify-center ">
+    <div className="w-full  h-[36rem]  bg-[#e9e8e3] flex flex-col gap-1 justify-center  ">
       <form
         onSubmit={(e) => handleSubmit(e)}
         className="w-full h-full flex flex-col items-center gap-4 "
@@ -179,7 +179,7 @@ const AddressForm = ({
       </form>
       <button
         onClick={() => goBack(false)}
-        className="bg-gray-500 px-3 py-2 text-white absolute bottom-8 rounded-md transition-all hover:scale-110 active:scale-95 "
+        className="bg-gray-500 px-3 py-2 text-white w-fit self-center mb-24  rounded-md transition-all hover:scale-110 active:scale-95 "
       >
         Back
       </button>

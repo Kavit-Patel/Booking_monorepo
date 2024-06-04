@@ -147,15 +147,14 @@ const SelectAddress = ({ back }: { back: (arg: boolean) => void }) => {
         </button>
       </div>
 
-      {addForm ||
-        (editAddress.status && (
-          <div className="absolute top-0">
-            <AddressForm
-              goBack={(arg: boolean) => comeBack(arg)}
-              editAddress={editAddress}
-            />
-          </div>
-        ))}
+      {(addForm || editAddress.status) && (
+        <div className="w-full h-full absolute top-12 px-8">
+          <AddressForm
+            goBack={(arg: boolean) => comeBack(arg)}
+            editAddress={editAddress}
+          />
+        </div>
+      )}
     </div>
   );
 };
